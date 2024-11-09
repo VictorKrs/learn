@@ -1,39 +1,55 @@
 package liga.tasks.ru.learn.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
+import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.functions.AuthorFactory;
-import liga.tasks.ru.learn.models.AuthorModel;
+import liga.tasks.ru.learn.models.author.AuthorCreate;
+import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
+import liga.tasks.ru.learn.services.exceptions.AuthorAlreadyExistException;
+import liga.tasks.ru.learn.services.exceptions.AuthorNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-// @RequiredArgsConstructor
+@RequiredArgsConstructor
 @Log4j2
 public class AuthorsService {
 
     private final AuthorRepository authorRepository;
 
-    public AuthorsService(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-        log.info("test MESWSAGE");
+    public AuthorModel save(AuthorCreate authorIn) {
+        Author author = AuthorFactory.getAuthor(authorIn);
+        
+        checkAuthorOnExist(author);
+
+        return AuthorFactory.getAuthorModel(authorRepository.save(author));
     }
 
-    public List<AuthorModel> findAll() {
-        return authorRepository.findAll().stream()
-            .map(AuthorModel::createAuthorModel)
-            .collect(Collectors.toList());
-    }
-   
     public AuthorModel findById(Long id) {
-        return AuthorFactory.createAuthorModel(authorRepository.findById(id).get());
+        return authorRepository.findById(id)
+                .map(AuthorFactory::getAuthorModel)
+                .orElseThrow(() -> new AuthorNotFoundException(id));
     }
 
-    public AuthorModel save(AuthorModel author) {
-        return AuthorFactory.createAuthorModel(authorRepository.save(AuthorFactory.createAuthor(author)));
+    public AuthorModel update(AuthorModel authorModel) {
+        var authorInDb = findById(authorModel.getId());
+
+        Author authorOnUpdate = AuthorFactory.getAuthor(authorModel);
+        if (!authorInDb.getName().equals(authorOnUpdate.getName())){
+            checkAuthorOnExist(authorOnUpdate);
+        }
+
+        return AuthorFactory.getAuthorModel(authorRepository.save(authorOnUpdate));
+    }
+
+    public void deleteById(Long id) {
+        authorRepository.deleteById(id);
+    }
+
+    private void checkAuthorOnExist(Author author) {
+        authorRepository.findByName(author.getName())
+            .ifPresent(authorInDb -> { throw new AuthorAlreadyExistException(authorInDb); });
     }
 }

@@ -8,16 +8,28 @@ import java.util.stream.Collectors;
 
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.models.BookModel;
+import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 
 public class BookFactory {
+
+    public static Book getBook(BookWithoutAuthors bookIn) {
+        return Book.builder()
+                .id(bookIn.getId())
+                .title(bookIn.getTitle())
+                .build();
+    }
+
+    public static BookWithoutAuthors getBookWithoutAuthors(Book book) {
+        return BookWithoutAuthors.builder().id(book.getId()).title(book.getTitle()).build();
+    }
 
     public static BookModel creatBookModel(Book book) {
         return BookModel.builder()
             .id(book.getId())
             .title(book.getTitle())
-            .authors(book.getAuthors().stream()
-                .map(AuthorFactory::createBookAuthorModel)
-                .collect(Collectors.toList()))
+            // .authors(book.getAuthors().stream()
+            //     // .map(AuthorFactory::createBookAuthorModel)
+            //     .collect(Collectors.toList()))
             .build();
     }
 
