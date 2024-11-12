@@ -107,6 +107,17 @@ public class AuthorRepositoryTest {
         checkBooks(result);
     }
 
+    @Test
+    public void deleteByIdTest_good() {
+        var author = authorRepository.save(getAuthorWithBooks());
+        authorRepository.deleteById(author.getId());
+
+        assertTrue(authorRepository.findById(author.getId()).isEmpty());
+        BOOKS.forEach(book -> {
+            assertTrue(bookRepository.findById(book.getId()).isPresent());
+        });
+    }
+
     private Author getAuthor() {
         var author = new Author();
         author.setName(AUTHOR_NAME);
