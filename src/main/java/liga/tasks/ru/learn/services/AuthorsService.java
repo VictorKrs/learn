@@ -3,12 +3,12 @@ package liga.tasks.ru.learn.services;
 import org.springframework.stereotype.Service;
 
 import liga.tasks.ru.learn.entities.Author;
+import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
+import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.functions.AuthorFactory;
 import liga.tasks.ru.learn.models.author.AuthorCreate;
 import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
-import liga.tasks.ru.learn.services.exceptions.AuthorAlreadyExistException;
-import liga.tasks.ru.learn.services.exceptions.AuthorNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

@@ -36,7 +36,7 @@ public class AuthorsController {
     }
 
     @PutMapping
-    public AuthorModel putMethodName(@RequestBody AuthorModel author) {
+    public AuthorModel updateAuthor(@RequestBody AuthorModel author) {
         return authorsService.update(author);
     }
 

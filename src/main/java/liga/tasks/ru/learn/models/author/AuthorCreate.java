@@ -1,6 +1,7 @@
 package liga.tasks.ru.learn.models.author;
 
 import java.util.List;
+import java.util.Objects;
 
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
@@ -15,4 +16,22 @@ public class AuthorCreate implements DefaultAuthorFields {
 
     private String name;
     private List<BookWithoutAuthors> books;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o == null || !o.getClass().getName().equals(this.getClass().getName())) {
+            return false;
+        }
+
+        AuthorCreate author = (AuthorCreate) o;
+
+        return this.name.equals(author.name) && Objects.equals(this.books, author.books);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, books);
+    }
 }

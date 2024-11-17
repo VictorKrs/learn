@@ -19,12 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import liga.tasks.ru.learn.entities.Author;
+import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
+import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.functions.AuthorFactory;
 import liga.tasks.ru.learn.models.author.AuthorCreate;
 import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
-import liga.tasks.ru.learn.services.exceptions.AuthorAlreadyExistException;
-import liga.tasks.ru.learn.services.exceptions.AuthorNotFoundException;
 
 @SpringBootTest(classes = AuthorsService.class)
 public class AuthorsServiceTest {
