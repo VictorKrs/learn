@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import liga.tasks.ru.learn.models.BookModel;
+import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.services.BooksService;
 import lombok.RequiredArgsConstructor;
 

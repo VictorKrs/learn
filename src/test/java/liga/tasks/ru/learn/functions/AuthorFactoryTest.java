@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -26,6 +27,7 @@ import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.interfaces.IdField;
 import liga.tasks.ru.learn.models.author.AuthorCreate;
 import liga.tasks.ru.learn.models.author.AuthorModel;
+import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
 import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 import lombok.extern.log4j.Log4j2;
 
@@ -79,6 +81,25 @@ public class AuthorFactoryTest {
 
             check(authorModel, author);
         });
+    }
+
+    @Test
+    public void getAuthorTest_authorWithoutBooks_good() {
+        AuthorWithoutBooks author = AuthorWithoutBooks.builder().id(AUTHOR_ID).name(AUTHOR_NAME).build();
+
+        Author result = AuthorFactory.getAuthor(author);
+        assertEquals(AUTHOR_ID, result.getId());
+        assertEquals(AUTHOR_NAME, result.getName());
+        assertNull(result.getBooks());
+    }
+
+    @Test
+    public void getAuthorWithoutBooksTest() {
+        Author author = Author.builder().id(AUTHOR_ID).name(AUTHOR_NAME).build();
+        AuthorWithoutBooks result = AuthorFactory.geAuthorWithoutBooks(author);
+
+        assertEquals(AUTHOR_ID, result.getId());
+        assertEquals(AUTHOR_NAME, result.getName());
     }
 
     private static Book getBook(Long id) {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.functions.BookFactory;
-import liga.tasks.ru.learn.models.BookModel;
+import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -22,12 +22,12 @@ public class BooksService {
 
     public List<BookModel> findAll() {
         return bookRepository.findAll().stream()
-            .map(BookFactory::creatBookModel)
+            .map(BookFactory::getBookModel)
             .collect(Collectors.toList());
     }
 
     public BookModel add(BookModel book) {
-        return BookFactory.creatBookModel(bookRepository.save(BookFactory.createBook(book)));
+        return BookFactory.getBookModel(bookRepository.save(BookFactory.getBook(book)));
     }
  
     public BookModel getBookById(Long id) {
@@ -40,6 +40,6 @@ public class BooksService {
         author.setBooks(new HashSet<>());
         book.setAuthors(new HashSet<Author>() {{add(author); }});
         
-        return BookFactory.creatBookModel(book);
+        return BookFactory.getBookModel(book);
     }
 }

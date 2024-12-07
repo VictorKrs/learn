@@ -1,13 +1,13 @@
 package liga.tasks.ru.learn.functions;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import liga.tasks.ru.learn.entities.Book;
-import liga.tasks.ru.learn.models.BookModel;
+import liga.tasks.ru.learn.interfaces.DefaultBookFields;
+import liga.tasks.ru.learn.interfaces.IdField;
+import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 
 public class BookFactory {
@@ -19,32 +19,25 @@ public class BookFactory {
                 .build();
     }
 
+    public static Book getBook(DefaultBookFields bookModel) {
+        return Book.builder()
+                .id((bookModel instanceof IdField) ? ((IdField)bookModel).getId() : null)
+                .title(bookModel.getTitle())
+                .authors(Optional.ofNullable(bookModel.getAuthors())
+                    .map(authors -> authors.stream().map(AuthorFactory::getAuthor).collect(Collectors.toSet()))
+                    .orElse(new HashSet<>()))
+                .build();
+    }
+
     public static BookWithoutAuthors getBookWithoutAuthors(Book book) {
         return BookWithoutAuthors.builder().id(book.getId()).title(book.getTitle()).build();
     }
 
-    public static BookModel creatBookModel(Book book) {
+    public static BookModel getBookModel(Book book) {
         return BookModel.builder()
-            .id(book.getId())
-            .title(book.getTitle())
-            // .authors(book.getAuthors().stream()
-            //     // .map(AuthorFactory::createBookAuthorModel)
-            //     .collect(Collectors.toList()))
-            .build();
-    }
-
-    public static Book createBook(BookModel book) {
-        return Book.builder()
+                .id(book.getId())
                 .title(book.getTitle())
-                .authors(null)
+                .authors(book.getAuthors().stream().map(AuthorFactory::geAuthorWithoutBooks).collect(Collectors.toList()))
                 .build();
-    }
-
-    public static Set<Book> createBooks(List<BookModel> books) {
-        return Optional.ofNullable(books)
-            .map(booksList -> booksList.stream()
-                .map(BookFactory::createBook)
-                .collect(Collectors.toSet()))
-            .orElse(new HashSet<>());
     }
 }

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -47,8 +47,8 @@ public class AuthorRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
-    @BeforeAll
-    public void addBooks() {
+    @BeforeEach
+    public void clear() {
         BOOKS = Arrays.asList(BOOK_TITLE_1, BOOK_TITLE_2).stream()
             .map(title -> Book.builder().title(title).build())
             .map(bookRepository::save)

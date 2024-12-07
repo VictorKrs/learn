@@ -2,6 +2,7 @@ package liga.tasks.ru.learn.models.book;
 
 import java.util.Objects;
 
+import liga.tasks.ru.learn.interfaces.IdField;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class BookWithoutAuthors {
+public class BookWithoutAuthors implements IdField {
 
     private Long id;
     private String title;

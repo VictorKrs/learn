@@ -9,6 +9,7 @@ import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.interfaces.IdField;
 import liga.tasks.ru.learn.models.author.AuthorModel;
+import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
 
 public class AuthorFactory {
 
@@ -22,6 +23,9 @@ public class AuthorFactory {
             .build();
     }
 
+    public static Author getAuthor(AuthorWithoutBooks author){
+        return Author.builder().id(author.getId()).name(author.getName()).build();
+    }
 
     public static AuthorModel getAuthorModel(Author author) {
         return AuthorModel.builder()
@@ -31,5 +35,9 @@ public class AuthorFactory {
                 .map(books -> books.stream().map(BookFactory::getBookWithoutAuthors).collect(Collectors.toList()))
                 .orElse(new ArrayList<>()))
             .build();
+    }
+
+    public static AuthorWithoutBooks geAuthorWithoutBooks(Author author) {
+        return AuthorWithoutBooks.builder().id(author.getId()).name(author.getName()).build();
     }
 }
