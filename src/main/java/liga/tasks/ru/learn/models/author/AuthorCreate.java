@@ -2,7 +2,8 @@ package liga.tasks.ru.learn.models.author;
 
 import java.util.List;
 import java.util.Objects;
-
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 import lombok.Builder;
@@ -12,8 +13,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@Schema(description = "Новый пользователь")
 public class AuthorCreate implements DefaultAuthorFields {
 
+    @NotEmpty
     private String name;
     private List<BookWithoutAuthors> books;
 
