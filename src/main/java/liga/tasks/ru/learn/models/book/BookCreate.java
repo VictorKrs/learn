@@ -3,6 +3,8 @@ package liga.tasks.ru.learn.models.book;
 import java.util.List;
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
 import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
 import lombok.Builder;
@@ -12,9 +14,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@Schema(description = "Набор данных для добавления произведения")
 public class BookCreate implements DefaultBookFields {
 
+    @NotBlank
+    @Schema(description = "Уникальное название произведения", example = "Винни-Пух")
     private String title;
+    @Schema(description = "Список авторов произведения")
     private List<AuthorWithoutBooks> authors;
 
     @Override

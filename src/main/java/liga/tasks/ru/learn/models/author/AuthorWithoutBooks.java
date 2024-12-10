@@ -2,6 +2,9 @@ package liga.tasks.ru.learn.models.author;
 
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import liga.tasks.ru.learn.interfaces.IdField;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@Schema(description = "Информация об авторе произведения")
 public class AuthorWithoutBooks  implements IdField {
 
+    @NotNull
+    @Min(1)
+    @Schema(description = "Id автора", example = "1")
     private Long id;
+    @Schema(description = "Имя автора", example = "Алан Милн")
     private String name;
 
     @Override
