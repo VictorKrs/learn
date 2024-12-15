@@ -2,6 +2,7 @@ package liga.tasks.ru.learn.entities;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +24,6 @@ public class Author {
     private Long id;
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     private Set<Book> books;
 }

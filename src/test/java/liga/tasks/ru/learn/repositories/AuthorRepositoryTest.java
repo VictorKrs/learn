@@ -114,7 +114,7 @@ public class AuthorRepositoryTest {
 
         assertTrue(authorRepository.findById(author.getId()).isEmpty());
         BOOKS.forEach(book -> {
-            assertTrue(bookRepository.findById(book.getId()).isPresent());
+            assertFalse(bookRepository.findById(book.getId()).isPresent());
         });
     }
 
