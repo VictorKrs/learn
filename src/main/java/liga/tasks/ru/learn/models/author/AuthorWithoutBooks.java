@@ -5,6 +5,7 @@ import java.util.Objects;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.interfaces.IdField;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,14 +15,18 @@ import lombok.Setter;
 @Setter
 @Builder
 @Schema(description = "Информация об авторе произведения")
-public class AuthorWithoutBooks  implements IdField {
+public class AuthorWithoutBooks  implements IdField, DefaultAuthorFields {
 
     @NotNull
     @Min(1)
     @Schema(description = "Id автора", example = "1")
     private Long id;
-    @Schema(description = "Имя автора", example = "Алан Милн")
-    private String name;
+    @Schema(description = "Фамилия автора", example = "Булгаков")
+    private String secondName;
+    @Schema(description = "Имя автора", example = "Михаил")
+    private String firstName;
+    @Schema(description = "Отчество автора", example = "Афанасьевич")
+    private String middleName;
 
     @Override
     public boolean equals(Object o) {
@@ -33,11 +38,11 @@ public class AuthorWithoutBooks  implements IdField {
 
         AuthorWithoutBooks author = (AuthorWithoutBooks) o;
 
-        return this.id.equals(author.id) && this.name.equals(author.name);
+        return this.id.equals(author.id) && this.getFullName().equals(author.getFullName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, getFullName());
     }
 }

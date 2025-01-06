@@ -51,7 +51,7 @@ public class BookFactoryTest {
             mockFactory.when(() -> AuthorFactory.getAuthor(any(AuthorWithoutBooks.class))).then(args -> {
                 AuthorWithoutBooks author = args.getArgument(0);
 
-                return Author.builder().id(author.getId()).name(author.getName()).build();
+                return Author.builder().id(author.getId()).firstName(author.getFirstName()).build();
             });
             
             Book result = BookFactory.getBook(book);
@@ -89,7 +89,7 @@ public class BookFactoryTest {
         testTemplate(mockFactory -> {
             mockFactory.when(() -> AuthorFactory.geAuthorWithoutBooks(any(Author.class))).thenAnswer(args -> {
                 Author author = args.getArgument(0);
-                return AuthorWithoutBooks.builder().id(author.getId()).name(author.getName()).build();
+                return AuthorWithoutBooks.builder().id(author.getId()).firstName(author.getFirstName()).build();
             });
 
             BookModel result = BookFactory.getBookModel(book);
@@ -107,20 +107,20 @@ public class BookFactoryTest {
     private List<AuthorWithoutBooks> getAuthorsWithoutbooks() {
         Long id = 10L;
         return Arrays.asList(
-            AuthorWithoutBooks.builder().id(id).name(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).name(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).name(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).name(AUTHOR + "_" + id++).build()
+            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
+            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
+            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
+            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build()
         );
     }
 
     private Set<Author> getAuthors() {
         return new HashSet<Author>() {{
             Long id = 10L;
-            add(Author.builder().id(id).name(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).name(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).name(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).name(AUTHOR + "_" + id++).build());
+            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
+            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
+            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
+            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
         }};
     }
 
@@ -137,7 +137,7 @@ public class BookFactoryTest {
             source.getAuthors().forEach(author -> 
                 assertTrue(result.getAuthors().stream()
                     .anyMatch(resAuthor -> author.getId().equals(resAuthor.getId()) 
-                            && author.getName().equals(resAuthor.getName()))));
+                            && author.getFullName().equals(resAuthor.getFullName()))));
         } else {
             assertTrue(result.getAuthors().isEmpty());
         }

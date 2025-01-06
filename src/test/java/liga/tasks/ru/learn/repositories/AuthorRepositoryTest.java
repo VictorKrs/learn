@@ -33,7 +33,9 @@ import lombok.extern.log4j.Log4j2;
 @TestInstance(Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class AuthorRepositoryTest {
-    private final String AUTHOR_NAME = "author name";
+    private final String AUTHOR_SECOND_NAME = "Ivanov";
+    private final String AUTHOR_FIRST_NAME = "Ivan";
+    private final String AUTHOR_MIDDLE_NAME = "Ivanovich";
     private final String AUTHOR_NAME_FIND = "author name find";
     private final String CHANGED_AUTHOR_NAME = "AuThor Name Changed";
     private final String BOOK_TITLE_1 = "Book1";
@@ -58,7 +60,7 @@ public class AuthorRepositoryTest {
 
     @Test
     public void insertAuthorTest_withoutBooks_good() {
-        var result = authorRepository.save(getAuthor());
+        var result = authorRepository.save(getAuthorDefault());
 
         checkAuthor(result);
         assertEquals(null, result.getBooks());
@@ -77,31 +79,32 @@ public class AuthorRepositoryTest {
 
     @Test
     public void findByNameTest_notExist_OptionalEmpty() {
-        assertFalse(authorRepository.findByName(AUTHOR_NAME_FIND).isPresent());
+        assertFalse(authorRepository.findBySecondNameAndFirstNameAndMiddleName(AUTHOR_SECOND_NAME, AUTHOR_NAME_FIND, AUTHOR_MIDDLE_NAME).isPresent());
     }
 
     @Test
-    public void findByNameTest_exist_OptionalWithAuthor() {
-        authorRepository.save(Author.builder().name(AUTHOR_NAME_FIND).build());
+    public void findBySecondNameAndFirstNameAndMiddleNameTest_exist_OptionalWithAuthor() {
+        authorRepository.save(getAuthor(AUTHOR_NAME_FIND));
 
-        Author result = authorRepository.findByName(AUTHOR_NAME_FIND).orElse(null);
+        Author result = authorRepository.findBySecondNameAndFirstNameAndMiddleName(AUTHOR_SECOND_NAME, AUTHOR_NAME_FIND, AUTHOR_MIDDLE_NAME).orElse(null);
 
         assertNotNull(result);
         assertTrue(result.getId() > 0);
-        assertEquals(AUTHOR_NAME_FIND, result.getName());
+        
+        checkFullName(result, AUTHOR_NAME_FIND);
     }
 
     @Test
     public void updateTest_good() {
-        Author author = authorRepository.save(getAuthor());
+        Author author = authorRepository.save(getAuthorDefault());
 
-        author.setName(CHANGED_AUTHOR_NAME);
+        author.setFirstName(CHANGED_AUTHOR_NAME);
         author.setBooks(BOOKS);
 
         authorRepository.save(author);
 
-        assertTrue(authorRepository.findByName(AUTHOR_NAME).isEmpty());
-        var result = authorRepository.findByName(CHANGED_AUTHOR_NAME).orElseGet(null);
+        assertTrue(authorRepository.findBySecondNameAndFirstNameAndMiddleName(AUTHOR_SECOND_NAME, AUTHOR_FIRST_NAME, AUTHOR_MIDDLE_NAME).isEmpty());
+        var result = authorRepository.findBySecondNameAndFirstNameAndMiddleName(AUTHOR_SECOND_NAME, CHANGED_AUTHOR_NAME, AUTHOR_MIDDLE_NAME).orElseGet(null);
         assertNotNull(result);
         assertEquals(author.getId(), result.getId());
         checkBooks(result);
@@ -118,14 +121,15 @@ public class AuthorRepositoryTest {
         });
     }
 
-    private Author getAuthor() {
-        var author = new Author();
-        author.setName(AUTHOR_NAME);
-        return author;
+    private Author getAuthorDefault() {
+        return getAuthor(AUTHOR_FIRST_NAME);
+    }
+    private Author getAuthor(String firstName) {
+        return Author.builder().secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
     }
 
     private Author getAuthorWithBooks() {
-        var author = getAuthor();
+        var author = getAuthorDefault();
         
         author.setBooks(BOOKS);
 
@@ -137,7 +141,7 @@ public class AuthorRepositoryTest {
         log.info("Author: {}", result);
 
         assertNotNull(result);
-        assertEquals(AUTHOR_NAME, result.getName());
+        checkFullName(result, AUTHOR_FIRST_NAME);
         assertTrue(result.getId() > 0);
     }
 
@@ -148,5 +152,11 @@ public class AuthorRepositoryTest {
             assertNotNull(book);
             assertEquals(book.getTitle(), bookRepository.findById(book.getId()).get().getTitle());
         });
+    }
+
+    private void checkFullName(Author author, String expectedFirstName) {
+        assertEquals(AUTHOR_SECOND_NAME, author.getSecondName());
+        assertEquals(expectedFirstName, author.getFirstName());
+        assertEquals(AUTHOR_MIDDLE_NAME, author.getMiddleName());
     }
 }

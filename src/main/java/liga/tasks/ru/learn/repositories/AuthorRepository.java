@@ -8,5 +8,5 @@ import liga.tasks.ru.learn.entities.Author;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    public Optional<Author> findByName(String name);
+    public Optional<Author> findBySecondNameAndFirstNameAndMiddleName(String secondName, String firstName, String middleName);
 }

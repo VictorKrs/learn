@@ -1,10 +1,15 @@
 package liga.tasks.ru.learn.interfaces;
 
-import java.util.List;
 
-import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public interface DefaultAuthorFields {
-    String getName();
-    List<BookWithoutAuthors> getBooks();
+    String getSecondName();
+    String getFirstName();
+    String getMiddleName();
+
+    @JsonIgnore
+    default String getFullName() {
+        return getSecondName() + " " + getFirstName() + (getMiddleName() != null && !getMiddleName().isEmpty() ? " " + getMiddleName() : "");
+    }
 }

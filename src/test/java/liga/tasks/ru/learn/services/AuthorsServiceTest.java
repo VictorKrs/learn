@@ -22,15 +22,18 @@ import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
 import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.functions.AuthorFactory;
+import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.models.author.AuthorCreate;
 import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 
 @SpringBootTest(classes = AuthorsService.class)
 public class AuthorsServiceTest {
-    private String AUTHOR_NAME = "Ivanov Ivan";
-    private String CHANGED_AUTHOR_NAME = "Ivanov Ivan CHANGED";
-    private Long AUTHOR_ID = 1L;
+    private final String AUTHOR_SECOND_NAME = "Ivanov";
+    private final String AUTHOR_FIRST_NAME = "Ivan";
+    private final String AUTHOR_MIDDLE_NAME = "Ivanovich";
+    private final String CHANGED_AUTHOR_NAME = "Ivanov Ivan CHANGED";
+    private final Long AUTHOR_ID = 1L;
 
     @MockBean
     private AuthorRepository authorRepository;
@@ -41,7 +44,7 @@ public class AuthorsServiceTest {
     @Test
     public void saveTest_authorAlreadyExist_AuthorAlreadyExistException() {
         Author author = getAuthor();
-        when(authorRepository.findByName(eq(AUTHOR_NAME))).thenReturn(Optional.of(author));
+        mockFindByFullName(AUTHOR_FIRST_NAME, Optional.of(author));
     
         testTemplate(mockFactory -> {
             mockGetAuthorForCreate(mockFactory);
@@ -52,16 +55,16 @@ public class AuthorsServiceTest {
 
     @Test
     public void saveTest_good() {
-        mockFindByNameWithEmpty(AUTHOR_NAME);
+        mockFindByFullName(AUTHOR_FIRST_NAME, Optional.empty());
         mockSave();
     
         testTemplate(mockFactory -> {
             mockGetAuthorForCreate(mockFactory);
             mockGetAuthorModel(mockFactory);
 
-            var result = authorsService.save(getAuthorCreate());
+            AuthorModel result = authorsService.save(getAuthorCreate());
             
-            assertEquals(AUTHOR_NAME, result.getName());
+            checkAuthorDedaultFields(AUTHOR_FIRST_NAME, result);
             assertEquals(AUTHOR_ID, result.getId());
         });
     }
@@ -83,30 +86,30 @@ public class AuthorsServiceTest {
             var result = authorsService.findById(AUTHOR_ID);
             assertNotNull(result);
             assertEquals(AUTHOR_ID, result.getId());
-            assertEquals(AUTHOR_NAME, result.getName());
+            checkAuthorDedaultFields(AUTHOR_FIRST_NAME, result);
         });
     }
 
     @Test
     public void updateTest_good() {
         mockFindByIdWithResult();
-        mockFindByNameWithEmpty(CHANGED_AUTHOR_NAME);
+        mockFindByFullName(CHANGED_AUTHOR_NAME, Optional.empty());
         mockSave();
 
         testTemplate(mockFactory -> {
             mockFactory.when(() -> AuthorFactory.getAuthor(any(AuthorModel.class))).thenAnswer(args -> {
                 AuthorModel model = args.getArgument(0);
 
-                return Author.builder().id(model.getId()).name(model.getName()).build();
+                return Author.builder().id(model.getId()).secondName(model.getSecondName()).firstName(model.getFirstName()).middleName(model.getMiddleName()).build();
             });
             mockGetAuthorModel(mockFactory);
 
 
-            AuthorModel author = AuthorModel.builder().id(AUTHOR_ID).name(CHANGED_AUTHOR_NAME).build();
+            AuthorModel author = AuthorModel.builder().id(AUTHOR_ID).secondName(AUTHOR_SECOND_NAME).firstName(CHANGED_AUTHOR_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
             var result = authorsService.update(author);
 
             assertEquals(author.getId(), result.getId());
-            assertEquals(author.getName(), result.getName());
+            checkAuthorDedaultFields(CHANGED_AUTHOR_NAME, result);
         });
     }
 
@@ -118,11 +121,11 @@ public class AuthorsServiceTest {
     }   
 
     private AuthorCreate getAuthorCreate() {
-        return AuthorCreate.builder().name(AUTHOR_NAME).build();
+        return AuthorCreate.builder().secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
     }
 
     private Author getAuthor() {
-        return Author.builder().id(AUTHOR_ID).name(AUTHOR_NAME).build();
+        return Author.builder().id(AUTHOR_ID).secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
     }
 
 
@@ -130,11 +133,12 @@ public class AuthorsServiceTest {
         Author author = getAuthor();
         when(authorRepository.findById(eq(AUTHOR_ID))).thenReturn(Optional.of(author));
     }
-
-    private void mockFindByNameWithEmpty(String authorName) {
-        when(authorRepository.findByName(eq(authorName))).thenReturn(Optional.empty());
-    }
     
+    private void mockFindByFullName(String firstName, Optional<Author> result) {
+        when(authorRepository.findBySecondNameAndFirstNameAndMiddleName(eq(AUTHOR_SECOND_NAME), eq(firstName), eq(AUTHOR_MIDDLE_NAME))).thenReturn(result);
+    }
+
+
     private void mockSave() {
         when(authorRepository.save(any(Author.class)))
             .thenAnswer(args -> {
@@ -148,7 +152,11 @@ public class AuthorsServiceTest {
 
     private void mockGetAuthorForCreate(MockedStatic<AuthorFactory> factoryMock) {
         factoryMock.when(() -> AuthorFactory.getAuthor(any(AuthorCreate.class)))
-            .thenReturn(Author.builder().name(AUTHOR_NAME).build());
+            .thenAnswer(args -> {
+                AuthorCreate author = args.getArgument(0);
+
+                return Author.builder().secondName(author.getSecondName()).firstName(author.getFirstName()).middleName(author.getMiddleName()).build();
+            });
     }
 
     private void mockGetAuthorModel(MockedStatic<AuthorFactory> factoryMock) {
@@ -156,7 +164,7 @@ public class AuthorsServiceTest {
             .thenAnswer(args -> {
                 Author author = args.getArgument(0);
 
-                return AuthorModel.builder().id(author.getId()).name(author.getName()).build();
+                return AuthorModel.builder().id(author.getId()).secondName(author.getSecondName()).firstName(author.getFirstName()).middleName(author.getMiddleName()).build();
             });
     }
 
@@ -164,5 +172,11 @@ public class AuthorsServiceTest {
         try (MockedStatic<AuthorFactory> authorFactoryMock = mockStatic(AuthorFactory.class)) {
             action.accept(authorFactoryMock);
         }
+    }
+
+    private void checkAuthorDedaultFields(String expectedFirstName, DefaultAuthorFields author) {
+        assertEquals(AUTHOR_SECOND_NAME, author.getSecondName());
+        assertEquals(expectedFirstName, author.getFirstName());
+        assertEquals(AUTHOR_MIDDLE_NAME, author.getMiddleName());
     }
 }

@@ -12,6 +12,12 @@ import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 
 public class BookFactory {
 
+    public static Book getBook(Long id) {
+        return Book.builder()
+                .id(id)
+                .build();
+    }
+
     public static Book getBook(BookWithoutAuthors bookIn) {
         return Book.builder()
                 .id(bookIn.getId())

@@ -22,8 +22,13 @@ public class AuthorModel implements DefaultAuthorFields, IdField {
     @Min(1)
     @Schema(description = "Id автора", example = "1")
     private Long id;
-    @Schema(description = "Имя автора", example = "Алан Милн")
-    private String name;
+
+    @Schema(description = "Фамилия автора", example = "Булгаков")
+    private String secondName;
+    @Schema(description = "Имя автора", example = "Михаил")
+    private String firstName;
+    @Schema(description = "Отчество автора", example = "Афанасьевич")
+    private String middleName;
 
     @Schema(description = "Список произведений автора")
     private List<BookWithoutAuthors> books;
@@ -38,11 +43,11 @@ public class AuthorModel implements DefaultAuthorFields, IdField {
 
         AuthorModel author = (AuthorModel) other;
 
-        return Objects.equals(this.id, author.id) && this.name.equals(author.name) && Objects.equals(this.books, author.books);
+        return Objects.equals(this.id, author.id) && this.getFullName().equals(author.getFullName()) && Objects.equals(this.books, author.books);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, books);
+        return Objects.hash(id, getFullName(), books);
     }
 } 

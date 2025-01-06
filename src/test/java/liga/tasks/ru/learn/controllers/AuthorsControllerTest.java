@@ -26,9 +26,11 @@ import liga.tasks.ru.learn.services.AuthorsService;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AuthorsControllerTest {
     private final Long AUTHOR_ID = 1L;
-    private final String AUTHOR_NAME = "Ivanov Ivan";
-    private final AuthorCreate AUTHOR_CREATE = AuthorCreate.builder().name(AUTHOR_NAME).build();
-    private final AuthorModel AUTHOR_MODEL = AuthorModel.builder().id(AUTHOR_ID).name(AUTHOR_NAME).build();
+    private final String AUTHOR_SECOND_NAME = "Ivanov";
+    private final String AUTHOR_FIRST_NAME = "Ivan";
+    private final String AUTHOR_MIDDLE_NAME = "Ivanovich";
+    private final AuthorCreate AUTHOR_CREATE = AuthorCreate.builder().secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
+    private final AuthorModel AUTHOR_MODEL = AuthorModel.builder().id(AUTHOR_ID).secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
 
 
     @MockBean
@@ -53,7 +55,7 @@ public class AuthorsControllerTest {
 
     @Test
     public void addAuthorTest_alreadyExist_badRequest() {
-        when(authorsService.save(AUTHOR_CREATE)).thenThrow(new AuthorAlreadyExistException(Author.builder().name(AUTHOR_NAME).build()));
+        when(authorsService.save(AUTHOR_CREATE)).thenThrow(new AuthorAlreadyExistException(Author.builder().secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build()));
 
         ResponseEntity<String> result = restTemplate.exchange(getBaseUrl(), HttpMethod.POST, new HttpEntity<>(AUTHOR_CREATE), String.class);
         
