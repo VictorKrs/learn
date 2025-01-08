@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mockStatic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -63,6 +64,11 @@ public class AuthorFactoryTest {
         );
     }
 
+    @Test
+    public void getAuthorTest_fromId_good() {
+        assertEquals(AUTHOR_ID, AuthorFactory.getAuthor(AUTHOR_ID).getId());
+    }
+
     @ParameterizedTest
     @MethodSource("getAuthorTestParameters_AuthorCreate")
     public void getAuthorTest_fromAuthorCreate_good(AuthorCreate authorIn) {
@@ -76,7 +82,7 @@ public class AuthorFactoryTest {
             
             Set<Book> expectedBooks = Optional.ofNullable(authorIn.getBooks())
                                             .map(books -> books.stream().map(this::convertIdToBook).collect(Collectors.toSet()))
-                                            .orElse(null);
+                                            .orElse(new HashSet<>());
 
             assertEquals(expectedBooks, author.getBooks());
         });
@@ -95,7 +101,7 @@ public class AuthorFactoryTest {
 
             Set<Book> expectedBooks = Optional.ofNullable(authorIn.getBooks())
                                             .map(books -> books.stream().map(this::convertToBook).collect(Collectors.toSet()))
-                                            .orElse(null);
+                                            .orElse(new HashSet<>());
 
             assertEquals(expectedBooks, author.getBooks());
         });
@@ -112,9 +118,9 @@ public class AuthorFactoryTest {
             AuthorModel authorModel = AuthorFactory.getAuthorModel(author);
 
             checkDefaultAuthorFields(authorModel);
-            Set<BookWithoutAuthors> expectedBooks = Optional.ofNullable(author.getBooks())
-                                        .map(books -> books.stream().map(this::convertToBookWithoutAuthors).collect(Collectors.toSet()))
-                                        .orElse(null);
+            List<BookWithoutAuthors> expectedBooks = Optional.ofNullable(author.getBooks())
+                                        .map(books -> books.stream().map(this::convertToBookWithoutAuthors).collect(Collectors.toList()))
+                                        .orElse(new ArrayList<>());
 
             assertEquals(expectedBooks, authorModel.getBooks());
         });

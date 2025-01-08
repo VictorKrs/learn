@@ -87,6 +87,7 @@ public class AuthorRepositoryTest {
         authorRepository.save(getAuthor(AUTHOR_NAME_FIND));
 
         Author result = authorRepository.findBySecondNameAndFirstNameAndMiddleName(AUTHOR_SECOND_NAME, AUTHOR_NAME_FIND, AUTHOR_MIDDLE_NAME).orElse(null);
+        // Author result = authorRepository.findBySecondName(AUTHOR_SECOND_NAME).orElse(null);
 
         assertNotNull(result);
         assertTrue(result.getId() > 0);
@@ -125,7 +126,7 @@ public class AuthorRepositoryTest {
         return getAuthor(AUTHOR_FIRST_NAME);
     }
     private Author getAuthor(String firstName) {
-        return Author.builder().secondName(AUTHOR_SECOND_NAME).firstName(AUTHOR_FIRST_NAME).middleName(AUTHOR_MIDDLE_NAME).build();
+        return Author.builder().secondName(AUTHOR_SECOND_NAME).firstName(firstName).middleName(AUTHOR_MIDDLE_NAME).build();
     }
 
     private Author getAuthorWithBooks() {

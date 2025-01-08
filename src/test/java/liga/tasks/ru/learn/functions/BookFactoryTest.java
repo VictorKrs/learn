@@ -3,8 +3,8 @@ package liga.tasks.ru.learn.functions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mockStatic;
 
 import java.util.Arrays;
@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -30,44 +31,79 @@ import lombok.extern.log4j.Log4j2;
 public class BookFactoryTest {
     public final static String TITLE = "title";
     public final static Long BOOK_ID = 1L;
+    public final static Long AUTHOR_ID = 10L;
     private final static String AUTHOR = "author";
 
     @Test
-    public void getBookTest_bookWithoutAuthors_good() {
+    public void getBookTest_fromId_good() {
+        Book result = BookFactory.getBook(BOOK_ID);
+
+        assertEquals(BOOK_ID, result.getId());
+    }
+
+    @Test
+    public void getBookTest_fromBookWithoutAuthors_good() {
         BookWithoutAuthors book = BookWithoutAuthors.builder().id(BOOK_ID).title(TITLE).build();
 
         Book result = BookFactory.getBook(book);
 
-        assertEquals(BOOK_ID, result.getId());
-        assertEquals(TITLE, result.getTitle());
+        checkDefaultBookFieldsAndId(result);
         assertNull(result.getAuthors());
     }
 
     @Test
-    public void getBookTest_notIdField_notEmptyAuthors_good() {
-        BookCreate book = BookCreate.builder().title(TITLE).authors(getAuthorsWithoutbooks()).build();
+    public void getBookTest_fromBookCreate_notEmptyAuthors_good() {
+        Set<Long> authorsId = new HashSet<Long>() {{ add(AUTHOR_ID); }};
+        BookCreate book = BookCreate.builder().title(TITLE).authors(authorsId).build();
 
         testTemplate(mockFactory -> {
-            mockFactory.when(() -> AuthorFactory.getAuthor(any(AuthorWithoutBooks.class))).then(args -> {
-                AuthorWithoutBooks author = args.getArgument(0);
-
-                return Author.builder().id(author.getId()).firstName(author.getFirstName()).build();
-            });
+            mockFactory.when(() -> AuthorFactory.getAuthor(anyLong())).thenAnswer(args -> convertIdToAuthor(args.getArgument(0)));
             
             Book result = BookFactory.getBook(book);
             
-            checkResult(book, result);
+            checkDefaultBookFields(result);
+            assertNull(result.getId());
+            assertEquals(authorsId.stream().map(this::convertIdToAuthor).collect(Collectors.toSet()), result.getAuthors());
         });
     }
 
     @Test
-    public void getBookTest_idField_emptyAuthors_good() {
-        BookModel book = BookModel.builder().id(BOOK_ID).title(TITLE).build();
+    public void getBookTest_fromBookCreate_emptyAuthors_good() {
+        BookCreate book = BookCreate.builder().title(TITLE).build();
 
-        testTemplate(ignored -> {
+        testTemplate(mockFactory -> {
             Book result = BookFactory.getBook(book);
             
-            checkResult(book, result);
+            checkDefaultBookFields(result);
+            assertNull(result.getId());
+            assertEquals(new HashSet<>(), result.getAuthors());
+        });
+    }
+
+    @Test
+    public void getBookTest_fromBookModel_notEmptyAuthors_good() {
+        List<AuthorWithoutBooks> authors = Arrays.asList(AuthorWithoutBooks.builder().firstName(AUTHOR).id(AUTHOR_ID).build());
+        BookModel book = BookModel.builder().id(BOOK_ID).title(TITLE).authors(authors).build();
+
+        testTemplate(mockFactory -> {
+            mockFactory.when(() -> AuthorFactory.getAuthor(any(AuthorWithoutBooks.class))).thenAnswer(args -> convertAuthorWithoutBooksToAuthor(args.getArgument(0)));
+            
+            Book result = BookFactory.getBook(book);
+            
+            checkDefaultBookFieldsAndId(result);
+            assertEquals(authors.stream().map(this::convertAuthorWithoutBooksToAuthor).collect(Collectors.toSet()), result.getAuthors());
+        });
+    }
+
+    @Test
+    public void getBookTest_fromBookModel_emptyAuthors_good() {
+        BookModel book = BookModel.builder().id(BOOK_ID).title(TITLE).build();
+
+        testTemplate(mockFactory -> {
+            Book result = BookFactory.getBook(book);
+            
+            checkDefaultBookFieldsAndId(result);
+            assertEquals(new HashSet<>(), result.getAuthors());
         });
     }
 
@@ -78,23 +114,21 @@ public class BookFactoryTest {
         BookWithoutAuthors result = BookFactory.getBookWithoutAuthors(book);
 
         assertNotNull(result);
-        assertEquals(book.getId(), result.getId());
-        assertEquals(book.getTitle(), result.getTitle());
+        checkDefaultBookFieldsAndId(result);
     }
 
     @Test
     public void getBookModelTest_good() {
-        Book book = Book.builder().id(BOOK_ID).title(TITLE).authors(getAuthors()).build();
+        Set<Author> authors = new HashSet<Author>() {{ add(Author.builder().id(AUTHOR_ID).firstName(AUTHOR).build()); }};
+        Book book = Book.builder().id(BOOK_ID).title(TITLE).authors(authors).build();
 
         testTemplate(mockFactory -> {
-            mockFactory.when(() -> AuthorFactory.geAuthorWithoutBooks(any(Author.class))).thenAnswer(args -> {
-                Author author = args.getArgument(0);
-                return AuthorWithoutBooks.builder().id(author.getId()).firstName(author.getFirstName()).build();
-            });
+            mockFactory.when(() -> AuthorFactory.geAuthorWithoutBooks(any(Author.class))).thenAnswer(args -> convertAuthorToAuthorWithoutBooks(args.getArgument(0)));
 
             BookModel result = BookFactory.getBookModel(book);
-
-            checkResult(result, book);
+            
+            checkDefaultBookFieldsAndId(result);
+            assertEquals(authors.stream().map(this::convertAuthorToAuthorWithoutBooks).collect(Collectors.toList()), result.getAuthors());
         });
     }
 
@@ -104,42 +138,25 @@ public class BookFactoryTest {
         }
     }
 
-    private List<AuthorWithoutBooks> getAuthorsWithoutbooks() {
-        Long id = 10L;
-        return Arrays.asList(
-            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build(),
-            AuthorWithoutBooks.builder().id(id).firstName(AUTHOR + "_" + id++).build()
-        );
+    private void checkDefaultBookFields(DefaultBookFields book) {
+        assertEquals(TITLE, book.getTitle());
     }
 
-    private Set<Author> getAuthors() {
-        return new HashSet<Author>() {{
-            Long id = 10L;
-            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
-            add(Author.builder().id(id).firstName(AUTHOR + "_" + id++).build());
-        }};
+    private void checkDefaultBookFieldsAndId(IdField book) {
+        checkDefaultBookFields((DefaultBookFields) book);
+
+        assertEquals(BOOK_ID , ((IdField)book).getId());
     }
 
-    private void checkResult(DefaultBookFields source, Book result) {
-        assertNotNull(result);
-        if (source instanceof IdField) {
-            assertEquals(((IdField)source).getId(), result.getId());
-        } else {
-            assertNull(result.getId());
-        }
-        assertEquals(source.getTitle(), result.getTitle());
-        if (source.getAuthors() != null) {
-            assertEquals(source.getAuthors().size(), result.getAuthors().size());
-            source.getAuthors().forEach(author -> 
-                assertTrue(result.getAuthors().stream()
-                    .anyMatch(resAuthor -> author.getId().equals(resAuthor.getId()) 
-                            && author.getFullName().equals(resAuthor.getFullName()))));
-        } else {
-            assertTrue(result.getAuthors().isEmpty());
-        }
+    private Author convertIdToAuthor(Long id) {
+        return Author.builder().id(id).build();
+    }
+
+    private Author convertAuthorWithoutBooksToAuthor(AuthorWithoutBooks author) {
+        return Author.builder().id(author.getId()).firstName(author.getFirstName()).secondName(author.getSecondName()).middleName(author.getMiddleName()).build();
+    }
+
+    private AuthorWithoutBooks convertAuthorToAuthorWithoutBooks(Author author) {
+        return AuthorWithoutBooks.builder().id(author.getId()).firstName(author.getFirstName()).secondName(author.getSecondName()).middleName(author.getMiddleName()).build();
     }
 }

@@ -10,14 +10,18 @@ import jakarta.validation.constraints.NotNull;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
 import liga.tasks.ru.learn.interfaces.IdField;
 import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
 @Schema(description = "Информация о произведении")
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookModel implements DefaultBookFields, IdField{
 
     @NotNull

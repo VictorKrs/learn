@@ -1,27 +1,30 @@
 package liga.tasks.ru.learn.models.book;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
-import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
 @Schema(description = "Набор данных для добавления произведения")
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookCreate implements DefaultBookFields {
 
     @NotBlank
     @Schema(description = "Уникальное название произведения", example = "Винни-Пух")
     private String title;
-    @Schema(description = "Список авторов произведения")
-    private List<AuthorWithoutBooks> authors;
+    @Schema(description = "Список id авторов произведения")
+    private Set<Long> authors;
 
     @Override
     public boolean equals(Object o) {

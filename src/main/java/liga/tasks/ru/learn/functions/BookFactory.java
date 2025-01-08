@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
 import liga.tasks.ru.learn.interfaces.IdField;
+import liga.tasks.ru.learn.models.book.BookCreate;
 import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 
@@ -25,11 +26,17 @@ public class BookFactory {
                 .build();
     }
 
-    public static Book getBook(DefaultBookFields bookModel) {
-        return Book.builder()
-                .id((bookModel instanceof IdField) ? ((IdField)bookModel).getId() : null)
-                .title(bookModel.getTitle())
-                .authors(Optional.ofNullable(bookModel.getAuthors())
+    public static Book getBook(BookCreate book) {
+        return getBookBuilderDefault(book)
+                .authors(Optional.ofNullable(book.getAuthors())
+                    .map(authors -> authors.stream().map(AuthorFactory::getAuthor).collect(Collectors.toSet()))
+                    .orElse(new HashSet<>()))
+                .build();
+    }
+
+    public static Book getBook(BookModel book) {
+        return getBookBuilderDefault(book)
+                .authors(Optional.ofNullable(book.getAuthors())
                     .map(authors -> authors.stream().map(AuthorFactory::getAuthor).collect(Collectors.toSet()))
                     .orElse(new HashSet<>()))
                 .build();
@@ -45,5 +52,11 @@ public class BookFactory {
                 .title(book.getTitle())
                 .authors(book.getAuthors().stream().map(AuthorFactory::geAuthorWithoutBooks).collect(Collectors.toList()))
                 .build();
+    }
+
+    private static Book.BookBuilder getBookBuilderDefault(DefaultBookFields book) {
+        return Book.builder()
+                .id((book instanceof IdField) ? ((IdField)book).getId() : null)
+                .title(book.getTitle());
     }
 }
