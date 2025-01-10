@@ -1,0 +1,7 @@
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Булгаков', 'Михаил', 'Афанасьевич')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Достоевский', 'Фёдор', 'Михайлович')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Толстой', 'Лев', 'Николаевич')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Гоголь', 'Николай', 'Васильевич')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Тургенев', 'Иван', 'Сергеевич')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Чехов', 'Антон', 'Павлович')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Куприн', 'Александр', 'Иванович')

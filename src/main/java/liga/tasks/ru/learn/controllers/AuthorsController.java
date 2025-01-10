@@ -11,11 +11,15 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import liga.tasks.ru.learn.models.author.AuthorCreate;
 import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.services.AuthorsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +47,15 @@ public class AuthorsController {
         return authorsService.save(authorModel);
     }
 
+    
+
+    @GetMapping()
+    @Operation(summary = "Поиск авторов", description = "Поиск авторов с фильтрацией по первой букве")
+    public List<AuthorModel> getAuthors(@Size(max = 1, message = "from может содержать максимум 1 символ") @RequestParam("from") @Parameter(description = "Стартовая буква для поиска", example = "Г", allowEmptyValue = true) String from,
+        @Size(max = 1, message = "to может содержать максимум 1 символ") @RequestParam("to") @Parameter(description = "Конечная буква для поиска", example = "Щ", allowEmptyValue = true) String to) {
+        return authorsService.getAuthors(from, to);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об авторе", description = "Получение информации об авторе по id")
     @ApiResponse(responseCode = "200", description = "Успешное получение информации об авторе", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AuthorModel.class)))
@@ -67,4 +80,5 @@ public class AuthorsController {
         authorsService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
 }
