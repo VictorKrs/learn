@@ -1,4 +1,4 @@
-package liga.tasks.ru.learn.models.author;
+package liga.tasks.ru.learn.dto.author;
 
 import java.util.Objects;
 import java.util.Set;

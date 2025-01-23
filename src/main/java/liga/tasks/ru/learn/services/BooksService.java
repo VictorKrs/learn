@@ -5,14 +5,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import liga.tasks.ru.learn.dto.book.BookCreate;
+import liga.tasks.ru.learn.dto.book.BookModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.exceptions.BookAlreadyExistException;
 import liga.tasks.ru.learn.exceptions.BookNotFoundException;
 import liga.tasks.ru.learn.functions.BookFactory;
-import liga.tasks.ru.learn.models.book.BookCreate;
-import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 import liga.tasks.ru.learn.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;

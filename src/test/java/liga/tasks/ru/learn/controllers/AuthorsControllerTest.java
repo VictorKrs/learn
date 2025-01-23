@@ -17,10 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import liga.tasks.ru.learn.dto.author.AuthorCreate;
+import liga.tasks.ru.learn.dto.author.AuthorModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
-import liga.tasks.ru.learn.models.author.AuthorCreate;
-import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.services.AuthorsService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
+import liga.tasks.ru.learn.dto.author.AuthorCreate;
+import liga.tasks.ru.learn.dto.author.AuthorModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
@@ -17,8 +19,6 @@ import liga.tasks.ru.learn.exceptions.BookNotFoundException;
 import liga.tasks.ru.learn.exceptions.FilterAuthorsException;
 import liga.tasks.ru.learn.exceptions.FutureGetException;
 import liga.tasks.ru.learn.functions.AuthorFactory;
-import liga.tasks.ru.learn.models.author.AuthorCreate;
-import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 import liga.tasks.ru.learn.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;

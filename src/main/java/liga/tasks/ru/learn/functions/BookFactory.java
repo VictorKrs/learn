@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import liga.tasks.ru.learn.dto.book.BookCreate;
+import liga.tasks.ru.learn.dto.book.BookModel;
+import liga.tasks.ru.learn.dto.book.BookWithoutAuthors;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
 import liga.tasks.ru.learn.interfaces.IdField;
-import liga.tasks.ru.learn.models.book.BookCreate;
-import liga.tasks.ru.learn.models.book.BookModel;
-import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 
 public class BookFactory {
 

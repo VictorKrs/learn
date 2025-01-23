@@ -18,13 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import liga.tasks.ru.learn.dto.book.BookCreate;
+import liga.tasks.ru.learn.dto.book.BookModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.exceptions.BookAlreadyExistException;
 import liga.tasks.ru.learn.exceptions.BookNotFoundException;
-import liga.tasks.ru.learn.models.book.BookCreate;
-import liga.tasks.ru.learn.models.book.BookModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 import liga.tasks.ru.learn.repositories.BookRepository;
 

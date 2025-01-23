@@ -1,4 +1,4 @@
-package liga.tasks.ru.learn.models.book;
+package liga.tasks.ru.learn.dto.book;
 
 import java.util.Objects;
 

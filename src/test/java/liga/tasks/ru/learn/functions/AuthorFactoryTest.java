@@ -23,13 +23,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedStatic;
 
+import liga.tasks.ru.learn.dto.author.AuthorCreate;
+import liga.tasks.ru.learn.dto.author.AuthorModel;
+import liga.tasks.ru.learn.dto.author.AuthorWithoutBooks;
+import liga.tasks.ru.learn.dto.book.BookWithoutAuthors;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
-import liga.tasks.ru.learn.models.author.AuthorCreate;
-import liga.tasks.ru.learn.models.author.AuthorModel;
-import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
-import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

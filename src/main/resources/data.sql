@@ -5,3 +5,6 @@ INSERT INTO author (second_name, first_name, middle_name) VALUES ('Гоголь', 'Ник
 INSERT INTO author (second_name, first_name, middle_name) VALUES ('Тургенев', 'Иван', 'Сергеевич')
 INSERT INTO author (second_name, first_name, middle_name) VALUES ('Чехов', 'Антон', 'Павлович')
 INSERT INTO author (second_name, first_name, middle_name) VALUES ('Куприн', 'Александр', 'Иванович')
+
+INSERT INTO users (username, password) VALUES ('admin', '12345')
+INSERT INTO users (username, password) VALUES ('user', '12345')

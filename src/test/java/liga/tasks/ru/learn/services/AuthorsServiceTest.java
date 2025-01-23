@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import liga.tasks.ru.learn.dto.author.AuthorCreate;
+import liga.tasks.ru.learn.dto.author.AuthorModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
@@ -30,8 +32,6 @@ import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
 import liga.tasks.ru.learn.exceptions.BookNotFoundException;
 import liga.tasks.ru.learn.functions.AuthorFactory;
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
-import liga.tasks.ru.learn.models.author.AuthorCreate;
-import liga.tasks.ru.learn.models.author.AuthorModel;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 import liga.tasks.ru.learn.repositories.BookRepository;
 

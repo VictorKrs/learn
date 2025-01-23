@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
+import liga.tasks.ru.learn.dto.author.AuthorWithoutBooks;
+import liga.tasks.ru.learn.dto.book.BookCreate;
+import liga.tasks.ru.learn.dto.book.BookModel;
+import liga.tasks.ru.learn.dto.book.BookWithoutAuthors;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
 import liga.tasks.ru.learn.interfaces.DefaultBookFields;
 import liga.tasks.ru.learn.interfaces.IdField;
-import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
-import liga.tasks.ru.learn.models.book.BookCreate;
-import liga.tasks.ru.learn.models.book.BookModel;
-import liga.tasks.ru.learn.models.book.BookWithoutAuthors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

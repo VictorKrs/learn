@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import liga.tasks.ru.learn.dto.author.AuthorCreate;
+import liga.tasks.ru.learn.dto.author.AuthorModel;
+import liga.tasks.ru.learn.dto.author.AuthorWithoutBooks;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.interfaces.DefaultAuthorFields;
 import liga.tasks.ru.learn.interfaces.IdField;
-import liga.tasks.ru.learn.models.author.AuthorCreate;
-import liga.tasks.ru.learn.models.author.AuthorModel;
-import liga.tasks.ru.learn.models.author.AuthorWithoutBooks;
 
 public class AuthorFactory {
 

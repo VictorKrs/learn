@@ -18,8 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import liga.tasks.ru.learn.models.book.BookCreate;
-import liga.tasks.ru.learn.models.book.BookModel;
+import liga.tasks.ru.learn.dto.book.BookCreate;
+import liga.tasks.ru.learn.dto.book.BookModel;
 import liga.tasks.ru.learn.services.BooksService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
