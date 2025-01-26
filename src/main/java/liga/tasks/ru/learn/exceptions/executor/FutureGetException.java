@@ -1,6 +1,8 @@
-package liga.tasks.ru.learn.exceptions;
+package liga.tasks.ru.learn.exceptions.executor;
 
 import org.springframework.http.HttpStatus;
+
+import liga.tasks.ru.learn.exceptions.common.BaseRuntimeException;
 
 public class FutureGetException extends BaseRuntimeException {
     public FutureGetException(Throwable e) {

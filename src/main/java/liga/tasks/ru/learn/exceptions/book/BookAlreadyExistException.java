@@ -1,8 +1,9 @@
-package liga.tasks.ru.learn.exceptions;
+package liga.tasks.ru.learn.exceptions.book;
 
 import org.springframework.http.HttpStatus;
 
 import liga.tasks.ru.learn.entities.Book;
+import liga.tasks.ru.learn.exceptions.common.BaseRuntimeException;
 
 public class BookAlreadyExistException extends BaseRuntimeException {
 

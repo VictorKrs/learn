@@ -1,9 +1,11 @@
-package liga.tasks.ru.learn.exceptions;
+package liga.tasks.ru.learn.exceptions.author;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+
+import liga.tasks.ru.learn.exceptions.common.BaseRuntimeException;
 
 public class AuthorNotFoundException extends BaseRuntimeException{
 

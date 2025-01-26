@@ -8,4 +8,5 @@ import lombok.Data;
 public class UserRegistration {
     private String username;
     private String password;
+    private String confirmPassword;
 }

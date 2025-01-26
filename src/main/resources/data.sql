@@ -1,10 +1,16 @@
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Булгаков', 'Михаил', 'Афанасьевич')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Достоевский', 'Фёдор', 'Михайлович')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Толстой', 'Лев', 'Николаевич')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Гоголь', 'Николай', 'Васильевич')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Тургенев', 'Иван', 'Сергеевич')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Чехов', 'Антон', 'Павлович')
-INSERT INTO author (second_name, first_name, middle_name) VALUES ('Куприн', 'Александр', 'Иванович')
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Р‘СѓР»РіР°РєРѕРІ', 'РњРёС…Р°РёР»', 'РђС„Р°РЅР°СЃСЊРµРІРёС‡');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Р РµРјР°СЂРє', 'Р­СЂРёС… РњР°СЂРёСЏ', '');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Р”РѕСЃС‚РѕРµРІСЃРєРёР№', 'Р¤РµРґРѕСЂ', 'РњРёС…Р°Р№Р»РѕРІРёС‡');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('РћСЂСѓСЌР»Р»', 'Р”Р¶РѕСЂРґР¶', '');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('РЈР°Р№Р»СЊРґ', 'РћСЃРєР°СЂ', '');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('РўРѕР»СЃС‚РѕР№', 'Р›РµРІ', 'РќРёРєРѕР»Р°РµРІРёС‡');
+INSERT INTO author (second_name, first_name, middle_name) VALUES ('Р“РѕРіРѕР»СЊ', 'РќРёРєРѕР»Р°Р№', 'Р’Р°СЃРёР»СЊРµРІРёС‡');
 
-INSERT INTO users (username, password) VALUES ('admin', '12345')
-INSERT INTO users (username, password) VALUES ('user', '12345')
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN');
+INSERT INTO roles (name) VALUES ('ROLE_USER');
+
+INSERT INTO users (username, password) VALUES ('admin', '$2a$10$WsEbkPytgRr.HiVCa7djmOiu0Mwz3VcWPk4M/0.2s2/t1nztI27Wq');
+INSERT INTO users (username, password) VALUES ('user', '$2a$10$WsEbkPytgRr.HiVCa7djmOiu0Mwz3VcWPk4M/0.2s2/t1nztI27Wq');
+
+INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO users_roles (user_id, role_id) VALUES (2, 2);

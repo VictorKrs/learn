@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import liga.tasks.ru.learn.dto.book.BookCreate;
 import liga.tasks.ru.learn.dto.book.BookModel;
@@ -35,8 +36,10 @@ public class BooksController {
 
     @PostMapping
     @Operation(summary = "Добавление произведения", description = "Сохранение информации о произведении в БД интернет магазина")
+    @SecurityRequirement(name = "AuthAny")
     @ApiResponse(responseCode = "200", description = "Успешное добавление произведения", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BookModel.class)))
     @ApiResponse(responseCode = "400", description = "Произведение с таким названием уже существует", content = @Content(examples = {@ExampleObject("Произведение с названием \"Винни-Пух\" уже существует")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
     @ApiResponse(responseCode = "404", description = "Не найдены авторы с указанными id", content = @Content(examples = {@ExampleObject("Не найдены авторы с id: 1, 2, 3")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
     public BookModel addBook(@RequestBody BookCreate book) {
         return booksService.save(book);
@@ -52,8 +55,11 @@ public class BooksController {
 
     @PutMapping
     @Operation(summary = "Обновление произведения", description = "Обновление информации о произведении в БД интернет магазина")
+    @SecurityRequirement(name = "AuthAdmin")
     @ApiResponse(responseCode = "200", description = "Информация о произведении успешно обновлена", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = BookModel.class)))
     @ApiResponse(responseCode = "400", description = "Произведение с таким названием уже существует", content = @Content(examples = {@ExampleObject("Произведение с названием \"Винни-Пух\" уже существует")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
+    @ApiResponse(responseCode = "403", description = "Доступ запрещен")
     @ApiResponse(responseCode = "404", description = "Произведение не найдено", content = @Content(examples = {@ExampleObject("Не найдено произведение с id 100")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
     public BookModel updateBook(@RequestBody BookModel book) {
         return booksService.update(book);
@@ -61,7 +67,10 @@ public class BooksController {
 
     @DeleteMapping
     @Operation(summary = "Удаление произведения", description = "Удаление информации о произведении из БД по id")
+    @SecurityRequirement(name = "AuthAdmin")
     @ApiResponse(responseCode = "204", description = "Успешное удаление произведения", content = @Content(examples = {@ExampleObject("NO CONTENT")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
+    @ApiResponse(responseCode = "403", description = "Доступ запрещен")
     public ResponseEntity<String> deleteById(@RequestParam("id") @Parameter(description = "ID произведения", example = "100") Long id) {
         booksService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

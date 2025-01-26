@@ -1,4 +1,4 @@
-package liga.tasks.ru.learn.exceptions;
+package liga.tasks.ru.learn.exceptions.common;
 
 import org.springframework.http.HttpStatus;
 

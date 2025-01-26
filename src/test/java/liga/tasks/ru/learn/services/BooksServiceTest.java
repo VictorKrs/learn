@@ -22,9 +22,9 @@ import liga.tasks.ru.learn.dto.book.BookCreate;
 import liga.tasks.ru.learn.dto.book.BookModel;
 import liga.tasks.ru.learn.entities.Author;
 import liga.tasks.ru.learn.entities.Book;
-import liga.tasks.ru.learn.exceptions.AuthorNotFoundException;
-import liga.tasks.ru.learn.exceptions.BookAlreadyExistException;
-import liga.tasks.ru.learn.exceptions.BookNotFoundException;
+import liga.tasks.ru.learn.exceptions.author.AuthorNotFoundException;
+import liga.tasks.ru.learn.exceptions.book.BookAlreadyExistException;
+import liga.tasks.ru.learn.exceptions.book.BookNotFoundException;
 import liga.tasks.ru.learn.repositories.AuthorRepository;
 import liga.tasks.ru.learn.repositories.BookRepository;
 

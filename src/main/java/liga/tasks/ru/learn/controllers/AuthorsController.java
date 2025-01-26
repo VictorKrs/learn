@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import liga.tasks.ru.learn.dto.author.AuthorCreate;
@@ -39,9 +40,11 @@ public class AuthorsController {
     private final AuthorsService authorsService;
 
     @PostMapping
-    @Operation(summary = "Добавление автора", description = "Сохранение информации об авторе в БД интернет магазина")
+    @Operation(summary = "Добавление автора", description = "Сохранение информации об авторе в БД интернет магазина;")
+    @SecurityRequirement(name = "AuthAny")
     @ApiResponse(responseCode = "200", description = "Успешное сохранение автора", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AuthorModel.class)))
     @ApiResponse(responseCode = "400", description = "Автор с таким именем уже существует", content = @Content(examples = {@ExampleObject("Автор с именем \"Алан Милн\" уже существует")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
     @ApiResponse(responseCode = "404", description = "Не найдены произведения с указанными id", content = @Content(examples = {@ExampleObject("Не найдены произведения с id: 1, 2, 3")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
     public AuthorModel addAuthor(@RequestBody AuthorCreate authorModel) {
         return authorsService.save(authorModel);
@@ -66,8 +69,11 @@ public class AuthorsController {
 
     @PutMapping
     @Operation(summary = "Обновление информации об авторе")
+    @SecurityRequirement(name = "AuthAdmin")
     @ApiResponse(responseCode = "200", description = "Успешное обновление информации об авторе", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AuthorModel.class)))
     @ApiResponse(responseCode = "400", description = "Автор с таким именем уже существует", content = @Content(examples = {@ExampleObject("Автор с именем \"Алан Милн\" уже существует")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
+    @ApiResponse(responseCode = "403", description = "Доступ запрещен")
     @ApiResponse(responseCode = "404", description = "Автор не найден", content = @Content(examples = {@ExampleObject("Не найден автор с id: 100")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
     public AuthorModel updateAuthor(@RequestBody AuthorModel author) {
         return authorsService.update(author);
@@ -75,7 +81,10 @@ public class AuthorsController {
 
     @DeleteMapping
     @Operation(summary = "Удаление информации об авторе", description = "Удаление информации об авторе по id")
+    @SecurityRequirement(name = "AuthAdmin")
     @ApiResponse(responseCode = "204", description = "Успешное удаление", content = @Content(examples = {@ExampleObject("NO CONTENT")}, mediaType = MediaType.TEXT_PLAIN_VALUE))
+    @ApiResponse(responseCode = "401", description = "Неавторизированный пользователь")
+    @ApiResponse(responseCode = "403", description = "Доступ запрещен")
     public ResponseEntity<String> deleteById(@RequestParam("id") @Parameter(description = "ID автора", example = "100") Long id) {
         authorsService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

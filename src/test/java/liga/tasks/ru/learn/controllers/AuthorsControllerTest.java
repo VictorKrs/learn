@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import liga.tasks.ru.learn.dto.author.AuthorCreate;
 import liga.tasks.ru.learn.dto.author.AuthorModel;
 import liga.tasks.ru.learn.entities.Author;
-import liga.tasks.ru.learn.exceptions.AuthorAlreadyExistException;
+import liga.tasks.ru.learn.exceptions.author.AuthorAlreadyExistException;
 import liga.tasks.ru.learn.services.AuthorsService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
