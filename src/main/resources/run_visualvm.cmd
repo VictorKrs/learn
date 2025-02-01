@@ -1,0 +1,1 @@
+"%userprofile%\JavaProjects\visualvm_2110\bin\visualvm.exe" --jdkhome "%userprofile%\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.13.11-hotspot"
